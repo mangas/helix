@@ -266,6 +266,7 @@ impl MappableCommand {
         append_mode, "Append after selection",
         command_mode, "Enter command mode",
         file_picker, "Open file picker",
+        file_picker_in_current_buffer_directory, "Open file picker at current buffers's directory",
         file_picker_in_current_directory, "Open file picker at current working directory",
         code_action, "Perform code action",
         buffer_picker, "Open buffer picker",
@@ -2267,6 +2268,23 @@ fn file_picker(cx: &mut Context) {
     cx.push_layer(Box::new(overlayed(picker)));
 }
 
+fn file_picker_in_current_buffer_directory(cx: &mut Context) {
+    let doc = doc!(cx.editor);
+
+    let doc_dir = match doc
+        .path()
+        .and_then(|path| path.parent().map(|path| path.to_path_buf()))
+    {
+        Some(path) => path,
+        None => {
+            cx.editor.set_error("current buffer has no path or parent");
+            return;
+        }
+    };
+
+    let picker = ui::file_picker(doc_dir, &cx.editor.config());
+    cx.push_layer(Box::new(overlayed(picker)));
+}
 fn file_picker_in_current_directory(cx: &mut Context) {
     let cwd = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("./"));
     let picker = ui::file_picker(cwd, &cx.editor.config());
