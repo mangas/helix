@@ -2269,22 +2269,18 @@ fn file_picker(cx: &mut Context) {
 }
 
 fn file_picker_in_current_buffer_directory(cx: &mut Context) {
-    let doc = doc!(cx.editor);
-
-    let doc_dir = match doc
+    let doc_dir = doc!(cx.editor)
         .path()
-        .and_then(|path| path.parent().map(|path| path.to_path_buf()))
-    {
-        Some(path) => path,
-        None => {
-            cx.editor.set_error("current buffer has no path or parent");
-            return;
-        }
-    };
-
-    let picker = ui::file_picker(doc_dir, &cx.editor.config());
-    cx.push_layer(Box::new(overlayed(picker)));
+        .and_then(|path| path.parent())
+        .map(Path::to_path_buf);
+    if let Some(path) = doc_dir {
+        let picker = ui::file_picker(path, &cx.editor.config());
+        cx.push_layer(Box::new(overlayed(picker)));
+    } else {
+        cx.editor.set_error("current buffer has no path or parent");
+    }
 }
+
 fn file_picker_in_current_directory(cx: &mut Context) {
     let cwd = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("./"));
     let picker = ui::file_picker(cwd, &cx.editor.config());
