@@ -196,18 +196,26 @@ or <a href="https://msys2.org/">MSYS2</a>.</p>
 <pre><code>choco install helix
 </code></pre>
 <p><strong>MSYS2:</strong></p>
+<p>Choose the proper command for your system from below:</p>
+<ul>
+<li>For 32 bit Windows 7 or above:</li>
+</ul>
 <pre><code>pacman -S mingw-w64-i686-helix
 </code></pre>
-<p>or</p>
+<ul>
+<li>For 64 bit Windows 7 or above:</li>
+</ul>
 <pre><code>pacman -S mingw-w64-x86_64-helix
 </code></pre>
-<p>or</p>
+<ul>
+<li>For 64 bit Windows 8.1 or above:</li>
+</ul>
 <pre><code>pacman -S mingw-w64-ucrt-x86_64-helix
 </code></pre>
 <h2 id="build-from-source"><a class="header" href="#build-from-source">Build from source</a></h2>
 <pre><code>git clone https://github.com/helix-editor/helix
 cd helix
-cargo install --path helix-term
+cargo install --path helix-term --locked
 </code></pre>
 <p>This will install the <code>hx</code> binary to <code>$HOME/.cargo/bin</code> and build tree-sitter grammars in <code>./runtime/grammars</code>.</p>
 <p>Helix also needs its runtime files so make sure to copy/symlink the <code>runtime/</code> directory into the
@@ -230,7 +238,7 @@ mklink /D runtime &quot;&lt;helix-repo&gt;\runtime&quot;
 </code></pre>
 <p>The runtime location can be overridden via the <code>HELIX_RUNTIME</code> environment variable.</p>
 <blockquote>
-<p>NOTE: if <code>HELIX_RUNTIME</code> is set prior to calling <code>cargo install --path helix-term</code>,
+<p>NOTE: if <code>HELIX_RUNTIME</code> is set prior to calling <code>cargo install --path helix-term --locked</code>,
 tree-sitter grammars will be built in <code>$HELIX_RUNTIME/grammars</code>.</p>
 </blockquote>
 <p>If you plan on keeping the repo locally, an alternative to copying/symlinking
@@ -699,8 +707,8 @@ it).</p>
 <tr><td><code>[p</code></td><td>Go to previous paragraph</td><td><code>goto_prev_paragraph</code></td></tr>
 <tr><td><code>]g</code></td><td>Go to next change</td><td><code>goto_next_change</code></td></tr>
 <tr><td><code>[g</code></td><td>Go to previous change</td><td><code>goto_prev_change</code></td></tr>
-<tr><td><code>]G</code></td><td>Go to first change</td><td><code>goto_first_change</code></td></tr>
-<tr><td><code>[G</code></td><td>Go to last change</td><td><code>goto_last_change</code></td></tr>
+<tr><td><code>[G</code></td><td>Go to first change</td><td><code>goto_first_change</code></td></tr>
+<tr><td><code>]G</code></td><td>Go to last change</td><td><code>goto_last_change</code></td></tr>
 <tr><td><code>[Space</code></td><td>Add newline above</td><td><code>add_newline_above</code></td></tr>
 <tr><td><code>]Space</code></td><td>Add newline below</td><td><code>add_newline_below</code></td></tr>
 </tbody></table>
@@ -902,7 +910,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>common-lisp</td><td>✓</td><td></td><td></td><td><code>cl-lsp</code></td></tr>
 <tr><td>cpon</td><td>✓</td><td></td><td>✓</td><td></td></tr>
 <tr><td>cpp</td><td>✓</td><td>✓</td><td>✓</td><td><code>clangd</code></td></tr>
-<tr><td>crystal</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>crystal</td><td>✓</td><td>✓</td><td></td><td></td></tr>
 <tr><td>css</td><td>✓</td><td></td><td></td><td><code>vscode-css-language-server</code></td></tr>
 <tr><td>cue</td><td>✓</td><td></td><td></td><td><code>cuelsp</code></td></tr>
 <tr><td>d</td><td>✓</td><td>✓</td><td>✓</td><td><code>serve-d</code></td></tr>
@@ -1006,7 +1014,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>swift</td><td>✓</td><td></td><td></td><td><code>sourcekit-lsp</code></td></tr>
 <tr><td>tablegen</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
 <tr><td>task</td><td>✓</td><td></td><td></td><td></td></tr>
-<tr><td>tfvars</td><td></td><td></td><td></td><td><code>terraform-ls</code></td></tr>
+<tr><td>tfvars</td><td>✓</td><td></td><td>✓</td><td><code>terraform-ls</code></td></tr>
 <tr><td>toml</td><td>✓</td><td></td><td></td><td><code>taplo</code></td></tr>
 <tr><td>tsq</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>tsx</td><td>✓</td><td>✓</td><td>✓</td><td><code>typescript-language-server</code></td></tr>
@@ -1357,6 +1365,11 @@ berry = &quot;#2A2A4D&quot;
 <p><code>type</code> - Types</p>
 <ul>
 <li><code>builtin</code> - Primitive types provided by the language (<code>int</code>, <code>usize</code>)</li>
+<li><code>enum</code>
+<ul>
+<li><code>variant</code></li>
+</ul>
+</li>
 </ul>
 </li>
 <li>
@@ -1470,6 +1483,9 @@ berry = &quot;#2A2A4D&quot;
 </li>
 <li>
 <p><code>namespace</code></p>
+</li>
+<li>
+<p><code>special</code></p>
 </li>
 <li>
 <p><code>markup</code></p>
