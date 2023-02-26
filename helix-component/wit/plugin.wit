@@ -1,0 +1,32 @@
+interface document{
+  line-number: func() -> u64
+  filename: func() -> option<string>
+}
+
+
+interface editor{
+  variant command {
+    clipboard-copy(string),
+    get-git-remote,
+  }
+
+  clipboard-copy: func(content: string)  
+  run-command: func(cmd: command) 
+}
+ 
+
+
+default world plugin {
+  record error {
+    code: u32,
+    msg: option<string>,
+  }
+
+  import document: self.document
+  import editor: self.editor
+
+
+  export handle-command: func(command: string) -> result<_, error>
+  export init: func(args: list<tuple<string, string>>) -> result<_, error>
+  export commands: func(command: string) -> list<string>
+}
