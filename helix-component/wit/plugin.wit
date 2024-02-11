@@ -1,32 +1,23 @@
-interface document{
-  line-number: func() -> u64
-  filename: func() -> option<string>
-}
+package helix:plugin;
 
-
-interface editor{
-  variant command {
-    clipboard-copy(string),
-    get-git-remote,
+interface editor {
+  record document {
+    line-number: u64,
+    filename: option<string>,
   }
 
-  clipboard-copy: func(content: string)  
-  run-command: func(cmd: command) 
+  get-git-remote: func() -> result<string, string>;
+  clipboard-copy: func(content: string) -> result<string, string>;
+  current-document: func() -> option<document>;
 }
- 
 
+world plugin {
+  import editor;
 
-default world plugin {
-  record error {
-    code: u32,
-    msg: option<string>,
-  }
+  export handle-command: func(command: string) -> result<string, string>;
+  export commands: func(command: string) -> list<string>;
+}
 
-  import document: self.document
-  import editor: self.editor
-
-
-  export handle-command: func(command: string) -> result<_, error>
-  export init: func(args: list<tuple<string, string>>) -> result<_, error>
-  export commands: func(command: string) -> list<string>
+world host {
+  export editor;
 }
