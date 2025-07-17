@@ -589,6 +589,7 @@ function or block of code.</p>
 <tr><td><code>c</code></td><td>Comment</td></tr>
 <tr><td><code>T</code></td><td>Test</td></tr>
 <tr><td><code>g</code></td><td>Change</td></tr>
+<tr><td><code>x</code></td><td>(X)HTML element</td></tr>
 </tbody></table>
 </div>
 <blockquote>
@@ -1013,6 +1014,8 @@ useful when you're simply looking over text and not actively editing it.</p>
 <tr><td><code>[g</code></td><td>Go to previous change</td><td><code>goto_prev_change</code></td></tr>
 <tr><td><code>]G</code></td><td>Go to last change</td><td><code>goto_last_change</code></td></tr>
 <tr><td><code>[G</code></td><td>Go to first change</td><td><code>goto_first_change</code></td></tr>
+<tr><td><code>[x</code></td><td>Go to next (X)HTML element</td><td><code>goto_next_xml_element</code></td></tr>
+<tr><td><code>]x</code></td><td>Go to previous (X)HTML element</td><td><code>goto_prev_xml_element</code></td></tr>
 <tr><td><code>]Space</code></td><td>Add newline below</td><td><code>add_newline_below</code></td></tr>
 <tr><td><code>[Space</code></td><td>Add newline above</td><td><code>add_newline_above</code></td></tr>
 </tbody></table>
@@ -1153,6 +1156,8 @@ space.B = ":echo %sh{git blame -L %{cursor_line},+1 %{buffer_name}}"
 <tr><td><code>line_ending</code></td><td>A string containing the line ending of the currently focused document. For example on Unix systems this is usually a line-feed character (<code>\n</code>) but on Windows systems this may be a carriage-return plus a line-feed (<code>\r\n</code>). The line ending kind of the currently focused document can be inspected with the <code>:line-ending</code> command.</td></tr>
 <tr><td><code>language</code></td><td>A string containing the language name of the currently focused document.</td></tr>
 <tr><td><code>selection</code></td><td>A string containing the contents of the primary selection of the currently focused document.</td></tr>
+<tr><td><code>selection_line_start</code></td><td>The line number of the start of the primary selection in the currently focused document, starting at 1.</td></tr>
+<tr><td><code>selection_line_end</code></td><td>The line number of the end of the primary selection in the currently focused document, starting at 1.</td></tr>
 </tbody></table>
 </div>
 <p>Aside from editor variables, the following expansions may be used:</p>
@@ -1267,7 +1272,7 @@ space.B = ":echo %sh{git blame -L %{cursor_line},+1 %{buffer_name}}"
 <tr><td><code>:log-open</code></td><td>Open the helix log file.</td></tr>
 <tr><td><code>:insert-output</code></td><td>Run shell command, inserting output before each selection.</td></tr>
 <tr><td><code>:append-output</code></td><td>Run shell command, appending output after each selection.</td></tr>
-<tr><td><code>:pipe</code>, `:</td><td>`</td></tr>
+<tr><td><code>:pipe</code>, <code>:|</code></td><td>Pipe each selection to the shell command.</td></tr>
 <tr><td><code>:pipe-to</code></td><td>Pipe each selection to the shell command, ignoring output.</td></tr>
 <tr><td><code>:run-shell-command</code>, <code>:sh</code>, <code>:!</code></td><td>Run a shell command</td></tr>
 <tr><td><code>:reset-diff-change</code>, <code>:diffget</code>, <code>:diffg</code></td><td>Reset the diff change at the cursor position.</td></tr>
@@ -1550,6 +1555,8 @@ space.B = ":echo %sh{git blame -L %{cursor_line},+1 %{buffer_name}}"
 <tr><td><code>goto_prev_comment</code></td><td>Goto previous comment</td><td>normal: <code>[c</code>, select: <code>[c</code></td></tr>
 <tr><td><code>goto_next_test</code></td><td>Goto next test</td><td>normal: <code>]T</code>, select: <code>]T</code></td></tr>
 <tr><td><code>goto_prev_test</code></td><td>Goto previous test</td><td>normal: <code>[T</code>, select: <code>[T</code></td></tr>
+<tr><td><code>goto_next_xml_element</code></td><td>Goto next (X)HTML element</td><td>normal: <code>]x</code>, select: <code>]x</code></td></tr>
+<tr><td><code>goto_prev_xml_element</code></td><td>Goto previous (X)HTML element</td><td>normal: <code>[x</code>, select: <code>[x</code></td></tr>
 <tr><td><code>goto_next_entry</code></td><td>Goto next pairing</td><td>normal: <code>]e</code>, select: <code>]e</code></td></tr>
 <tr><td><code>goto_prev_entry</code></td><td>Goto previous pairing</td><td>normal: <code>[e</code>, select: <code>[e</code></td></tr>
 <tr><td><code>goto_next_paragraph</code></td><td>Goto next paragraph</td><td>normal: <code>]p</code>, select: <code>]p</code></td></tr>
@@ -1615,6 +1622,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>c</td><td>✓</td><td>✓</td><td>✓</td><td><code>clangd</code></td></tr>
 <tr><td>c-sharp</td><td>✓</td><td>✓</td><td></td><td><code>OmniSharp</code></td></tr>
 <tr><td>cabal</td><td></td><td></td><td></td><td><code>haskell-language-server-wrapper</code></td></tr>
+<tr><td>caddyfile</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
 <tr><td>cairo</td><td>✓</td><td>✓</td><td>✓</td><td><code>cairo-language-server</code></td></tr>
 <tr><td>capnp</td><td>✓</td><td></td><td>✓</td><td></td></tr>
 <tr><td>cel</td><td>✓</td><td></td><td></td><td></td></tr>
@@ -1636,7 +1644,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>dart</td><td>✓</td><td>✓</td><td>✓</td><td><code>dart</code></td></tr>
 <tr><td>dbml</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>debian</td><td>✓</td><td></td><td></td><td></td></tr>
-<tr><td>devicetree</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>devicetree</td><td>✓</td><td></td><td></td><td><code>dts-lsp</code></td></tr>
 <tr><td>dhall</td><td>✓</td><td>✓</td><td></td><td><code>dhall-lsp-server</code></td></tr>
 <tr><td>diff</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>djot</td><td>✓</td><td></td><td></td><td></td></tr>
@@ -1674,6 +1682,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>git-commit</td><td>✓</td><td>✓</td><td></td><td></td></tr>
 <tr><td>git-config</td><td>✓</td><td>✓</td><td></td><td></td></tr>
 <tr><td>git-ignore</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>git-notes</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>git-rebase</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>gjs</td><td>✓</td><td>✓</td><td>✓</td><td><code>typescript-language-server</code>, <code>vscode-eslint-language-server</code>, <code>ember-language-server</code></td></tr>
 <tr><td>gleam</td><td>✓</td><td>✓</td><td></td><td><code>gleam</code></td></tr>
@@ -1699,7 +1708,8 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>hocon</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
 <tr><td>hoon</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>hosts</td><td>✓</td><td></td><td></td><td></td></tr>
-<tr><td>html</td><td>✓</td><td></td><td></td><td><code>vscode-html-language-server</code>, <code>superhtml</code></td></tr>
+<tr><td>html</td><td>✓</td><td>✓</td><td></td><td><code>vscode-html-language-server</code>, <code>superhtml</code></td></tr>
+<tr><td>htmldjango</td><td>✓</td><td></td><td></td><td><code>djlsp</code>, <code>vscode-html-language-server</code>, <code>superhtml</code></td></tr>
 <tr><td>hurl</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
 <tr><td>hyprlang</td><td>✓</td><td></td><td>✓</td><td><code>hyprls</code></td></tr>
 <tr><td>idris</td><td></td><td></td><td></td><td><code>idris2-lsp</code></td></tr>
@@ -1711,10 +1721,14 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>java</td><td>✓</td><td>✓</td><td>✓</td><td><code>jdtls</code></td></tr>
 <tr><td>javascript</td><td>✓</td><td>✓</td><td>✓</td><td><code>typescript-language-server</code></td></tr>
 <tr><td>jinja</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>jjconfig</td><td>✓</td><td>✓</td><td>✓</td><td><code>taplo</code>, <code>tombi</code></td></tr>
 <tr><td>jjdescription</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>jjrevset</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>jjtemplate</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>jq</td><td>✓</td><td>✓</td><td></td><td><code>jq-lsp</code></td></tr>
 <tr><td>jsdoc</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>json</td><td>✓</td><td>✓</td><td>✓</td><td><code>vscode-json-language-server</code></td></tr>
+<tr><td>json-ld</td><td>✓</td><td>✓</td><td>✓</td><td><code>vscode-json-language-server</code></td></tr>
 <tr><td>json5</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>jsonc</td><td>✓</td><td></td><td>✓</td><td><code>vscode-json-language-server</code></td></tr>
 <tr><td>jsonnet</td><td>✓</td><td></td><td></td><td><code>jsonnet-language-server</code></td></tr>
@@ -1780,12 +1794,13 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>powershell</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>prisma</td><td>✓</td><td>✓</td><td></td><td><code>prisma-language-server</code></td></tr>
 <tr><td>prolog</td><td>✓</td><td></td><td>✓</td><td><code>swipl</code></td></tr>
+<tr><td>properties</td><td>✓</td><td>✓</td><td></td><td></td></tr>
 <tr><td>protobuf</td><td>✓</td><td>✓</td><td>✓</td><td><code>buf</code>, <code>pb</code>, <code>protols</code></td></tr>
 <tr><td>prql</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>pug</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>purescript</td><td>✓</td><td>✓</td><td></td><td><code>purescript-language-server</code></td></tr>
 <tr><td>python</td><td>✓</td><td>✓</td><td>✓</td><td><code>ty</code>, <code>ruff</code>, <code>jedi-language-server</code>, <code>pylsp</code></td></tr>
-<tr><td>qml</td><td>✓</td><td></td><td>✓</td><td><code>qmlls</code></td></tr>
+<tr><td>qml</td><td>✓</td><td>✓</td><td>✓</td><td><code>qmlls</code></td></tr>
 <tr><td>quarto</td><td>✓</td><td></td><td>✓</td><td></td></tr>
 <tr><td>quint</td><td>✓</td><td></td><td></td><td><code>quint-language-server</code></td></tr>
 <tr><td>r</td><td>✓</td><td></td><td></td><td><code>R</code></td></tr>
@@ -1800,6 +1815,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>ruby</td><td>✓</td><td>✓</td><td>✓</td><td><code>ruby-lsp</code>, <code>solargraph</code></td></tr>
 <tr><td>rust</td><td>✓</td><td>✓</td><td>✓</td><td><code>rust-analyzer</code></td></tr>
 <tr><td>rust-format-args</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>rust-format-args-macro</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
 <tr><td>sage</td><td>✓</td><td>✓</td><td></td><td></td></tr>
 <tr><td>scala</td><td>✓</td><td>✓</td><td>✓</td><td><code>metals</code></td></tr>
 <tr><td>scheme</td><td>✓</td><td></td><td>✓</td><td></td></tr>
@@ -1822,6 +1838,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>svelte</td><td>✓</td><td></td><td>✓</td><td><code>svelteserver</code></td></tr>
 <tr><td>sway</td><td>✓</td><td>✓</td><td>✓</td><td><code>forc</code></td></tr>
 <tr><td>swift</td><td>✓</td><td>✓</td><td></td><td><code>sourcekit-lsp</code></td></tr>
+<tr><td>systemd</td><td>✓</td><td></td><td></td><td><code>systemd-lsp</code></td></tr>
 <tr><td>t32</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>tablegen</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
 <tr><td>tact</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
@@ -1861,7 +1878,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>wit</td><td>✓</td><td></td><td>✓</td><td></td></tr>
 <tr><td>wren</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
 <tr><td>xit</td><td>✓</td><td></td><td></td><td></td></tr>
-<tr><td>xml</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>xml</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
 <tr><td>xtc</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>yaml</td><td>✓</td><td>✓</td><td>✓</td><td><code>yaml-language-server</code>, <code>ansible-language-server</code></td></tr>
 <tr><td>yara</td><td>✓</td><td></td><td></td><td><code>yls</code></td></tr>
@@ -1993,6 +2010,7 @@ Its settings will be merged with the configuration directory <code>config.toml</
 <tr><td><code>workspace-lsp-roots</code></td><td>Directories relative to the workspace root that are treated as LSP roots. Should only be set in <code>.helix/config.toml</code></td><td><code>[]</code></td></tr>
 <tr><td><code>default-line-ending</code></td><td>The line ending to use for new documents. Can be <code>native</code>, <code>lf</code>, <code>crlf</code>, <code>ff</code>, <code>cr</code> or <code>nel</code>. <code>native</code> uses the platform's native line ending (<code>crlf</code> on Windows, otherwise <code>lf</code>).</td><td><code>native</code></td></tr>
 <tr><td><code>insert-final-newline</code></td><td>Whether to automatically insert a trailing line-ending on write if missing</td><td><code>true</code></td></tr>
+<tr><td><code>atomic-save</code></td><td>Whether to use atomic operations to write documents to disk. This prevents data loss if the editor is interrupted while writing the file, but may confuse some file watching/hot reloading programs.</td><td><code>true</code></td></tr>
 <tr><td><code>trim-final-newlines</code></td><td>Whether to automatically remove line-endings after the final one on write</td><td><code>false</code></td></tr>
 <tr><td><code>trim-trailing-whitespace</code></td><td>Whether to automatically remove whitespace preceding line endings on write</td><td><code>false</code></td></tr>
 <tr><td><code>popup-border</code></td><td>Draw border around <code>popup</code>, <code>menu</code>, <code>all</code>, or <code>none</code></td><td><code>none</code></td></tr>
@@ -3126,6 +3144,8 @@ for example).</p>
 <tr><td><code>comment.around</code></td></tr>
 <tr><td><code>entry.inside</code></td></tr>
 <tr><td><code>entry.around</code></td></tr>
+<tr><td><code>xml-element.inside</code></td></tr>
+<tr><td><code>xml-element.around</code></td></tr>
 </tbody></table>
 </div>
 <p><a href="https://github.com/search?q=repo%3Ahelix-editor%2Fhelix+path%3A%2A%2A/textobjects.scm&amp;type=Code&amp;ref=advsearch&amp;l=&amp;l=">Example query files</a> can be found in the helix GitHub repository.</p>
