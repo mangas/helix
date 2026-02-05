@@ -1335,6 +1335,7 @@ space.B = ":echo %sh{git blame -L %{cursor_line},+1 %{buffer_name}}"
 <tr><td><code>:run-shell-command</code>, <code>:sh</code>, <code>:!</code></td><td>Run a shell command</td></tr>
 <tr><td><code>:reset-diff-change</code>, <code>:diffget</code>, <code>:diffg</code></td><td>Reset the diff change at the cursor position.</td></tr>
 <tr><td><code>:clear-register</code></td><td>Clear given register. If no argument is provided, clear all registers.</td></tr>
+<tr><td><code>:set-register</code></td><td>Set contents of the given register.</td></tr>
 <tr><td><code>:redraw</code></td><td>Clear and re-render the whole UI</td></tr>
 <tr><td><code>:move</code>, <code>:mv</code></td><td>Move the current buffer and its corresponding file to a different path</td></tr>
 <tr><td><code>:yank-diagnostic</code></td><td>Yank diagnostic(s) under primary cursor to register, or clipboard by default</td></tr>
@@ -1767,6 +1768,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>glimmer</td><td>✓</td><td></td><td></td><td></td><td></td><td><code>ember-language-server</code></td></tr>
 <tr><td>glsl</td><td>✓</td><td>✓</td><td>✓</td><td></td><td></td><td><code>glsl_analyzer</code>, <code>glsld</code></td></tr>
 <tr><td>gn</td><td>✓</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>gnuplot</td><td>✓</td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>go</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td><code>gopls</code>, <code>golangci-lint-langserver</code></td></tr>
 <tr><td>go-format-string</td><td>✓</td><td></td><td></td><td></td><td>✓</td><td></td></tr>
 <tr><td>godot-resource</td><td>✓</td><td>✓</td><td></td><td></td><td></td><td></td></tr>
@@ -1954,9 +1956,10 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>textproto</td><td>✓</td><td>✓</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>tfvars</td><td>✓</td><td></td><td>✓</td><td></td><td></td><td><code>terraform-ls</code></td></tr>
 <tr><td>thrift</td><td>✓</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>tilt</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td><code>tilt</code></td></tr>
 <tr><td>tlaplus</td><td>✓</td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>todotxt</td><td>✓</td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>toml</td><td>✓</td><td>✓</td><td></td><td></td><td>✓</td><td><code>taplo</code>, <code>tombi</code></td></tr>
+<tr><td>toml</td><td>✓</td><td>✓</td><td></td><td>✓</td><td>✓</td><td><code>taplo</code>, <code>tombi</code></td></tr>
 <tr><td>tsq</td><td>✓</td><td></td><td></td><td></td><td>✓</td><td><code>ts_query_ls</code></td></tr>
 <tr><td>tsx</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td><code>typescript-language-server</code></td></tr>
 <tr><td>twig</td><td>✓</td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -2892,7 +2895,8 @@ The key is a list of styles.</p>
 <p><code>namespace</code></p>
 </li>
 <li>
-<p><code>special</code> - <code>derive</code> in Rust, etc.</p>
+<p><code>special</code> - <code>derive</code> in Rust, bolded query-match in pickers (includes file explorer), etc.
+See also <a href="https://github.com/helix-editor/helix/issues/2380">#2380</a></p>
 </li>
 <li>
 <p><code>markup</code></p>
@@ -3022,6 +3026,7 @@ The key is a list of styles.</p>
 <tr><td><code>ui.text.inactive</code></td><td>Same as <code>ui.text</code> but when the text is inactive (e.g. suggestions)</td></tr>
 <tr><td><code>ui.text.info</code></td><td>The key: command text in <code>ui.popup.info</code> boxes</td></tr>
 <tr><td><code>ui.text.directory</code></td><td>Directory names in prompt completion</td></tr>
+<tr><td><code>ui.text.symlink</code></td><td>Symlink names in prompt completion</td></tr>
 <tr><td><code>ui.virtual.ruler</code></td><td>Ruler columns (see the <a href="./configuration.html#editor-section"><code>editor.rulers</code> config</a>)</td></tr>
 <tr><td><code>ui.virtual.whitespace</code></td><td>Visible whitespace characters</td></tr>
 <tr><td><code>ui.virtual.indent-guide</code></td><td>Vertical indent width guides</td></tr>
